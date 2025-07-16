@@ -2,6 +2,11 @@
 /** @var SergiX44\Nutgram\Nutgram $bot */
 
 use SergiX44\Nutgram\Nutgram;
+use App\Telegram\Commands\StartCommand;
+use App\Telegram\Handlers\DeleteMessagesHandler;
+use App\Telegram\Handlers\PinMessageHandler;
+use App\Telegram\Handlers\DateTimeHandler;
+use App\Telegram\Handlers\ClassInfoHandler;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,10 @@ use SergiX44\Nutgram\Nutgram;
 |
 */
 
-$bot->onCommand('start', function (Nutgram $bot) {
-    $bot->sendMessage('Hello, world!');
-})->description('The start command!');
+$bot->onCommand('start', StartCommand::class);
+
+$bot->onText('(del|Del)(\s+\d+)?', [DeleteMessagesHandler::class, 'handle']);
+$bot->onText('(pin|Pin)', [PinMessageHandler::class, 'handle']);
+$bot->onText('(time|Time|date|Date|تایم|تاریخ)', [DateTimeHandler::class , 'handle']);
+$bot->onCommand('class', [ClassInfoHandler::class , 'handle']);
+$bot->onText('(جلسات|classes)', [ClassInfoHandler::class , 'handle']);
